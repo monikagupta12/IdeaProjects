@@ -8,15 +8,14 @@ import java.util.List;
 
 public class MiniSwapSortArray {
     public static void main(String[] args) {
-        int[]arr={6,4,2,14,8,10,12,16};
-        Integer[]a={6,4,2,14,8,10,12,16};
+        int[]arr={4,3,1,2,5};
+        Integer[]a={5,3,7,8,5,9,2,2,1};
         List<Integer> list= Arrays.asList(a);
-        int ans=swapCount(arr,list);
+        int ans=swapCount(arr);
         System.out.println(ans);
     }
 
-    private static int swapCount(int[] arr, List<Integer> list) {
-        Collections.sort(list);
+    private static int swapCount(int[] arr) {
         int n=arr.length;
         int[][]sort=new int[n][2];
         for(int i=0; i<n; i++){

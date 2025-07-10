@@ -1,42 +1,87 @@
 import java.util.Arrays;
 public class DebugPro {
-    public static boolean exit(char[][] board, int i, int j, boolean[][] visit, int idx, String word) {
-        int r = board.length;
-        int c = board[0].length;
-        if (i >= r || j >= c) {
-            return false;
+
+    public void solveSudoku(char[][] board) {
+        boolean[][] h=new boolean[9][10];
+        boolean[][] v=new boolean[9][10];
+        boolean[][] d = new boolean[9][10];
+
+        for(int i = 0; i < board.length; ++i) {
+            for(int j = 0; j < board[i].length; ++j) {
+                if(board[i][j] != '.') {
+                    int curr=board[i][j]-'0';
+                    h[i][curr]=true;
+                    v[j][curr]=true;
+                    int box=(i/3)+(j/3)*3;
+                    d[box][curr]=true;
+                }
+            }
         }
-        if (!isvaild(board, i, j, visit, idx, word)) {
-            return false;
+        dfs(0,0,board, h,v,d);
+    }
+    private boolean dfs(int r, int c, char[][] board, boolean[][] h, boolean[][] v, boolean[][] d){
+        if(c==9){
+            r=r+1;
+            c=0;
         }
-        if (idx == word.length() - 1) {
+        if(r==9){
             return true;
         }
-        char cc = board[i][j];
-        visit[i][j] = true;
-        boolean a = exit(board, i, j + 1, visit, idx + 1, word);
-        boolean b = exit(board, i, j - 1, visit, idx + 1, word);
-        boolean p = exit(board, i + 1, j, visit, idx + 1, word);
-        boolean d = exit(board, i - 1, j, visit, idx + 1, word);
-        visit[i][j] = false;
-        return (a || b || p || d);
+        if(board[r][c]!='.'){
+            return dfs(r,c+1,board,h,v,d);
+        }
+        for(int num=1; num<10; num++){
+            if(isVaild(num,board,r,c,h,v,d)){
+                char val=(char)(num+'0');
+                board[r][c]=val;
+                h[r][num]=true;
+                v[c][num]=true;
+                int box=(r/3)+(c/3)*3;
+                d[box][num]=true;
+                if(dfs(r,c+1,board,h,v,d)){
+                    return true;
+                }
+                h[r][num]=false;
+                v[c][num]=false;
+                d[box][num]=false;
+                board[r][c]='.';
+            }
+        }
+        return false;
+    }
+    private boolean isVaild(int num,char[][] board, int r, int c, boolean[][] h,boolean[][] v,boolean[][] d){
+        if(h[r][num]==true){
+            return false;
+        }
+        if(v[c][num]){
+            return false;
+        }
+        int box=(r/3)+(c/3)*3;
+        if(d[box][num]){
+            return false;
+        }
 
+        return true;
     }
 
-    public static boolean isvaild(char[][] board, int i, int j, boolean[][] visit, int idx, String word) {
-        int r = board.length;
-        int c = board[0].length;
-        return (i >= 0 && j >= 0 && i < r && j < c && board[i][j] == word.charAt(idx) && !visit[i][j]);
-    }
 
     public static void main(String[] args) {
-        char board[][] = {{'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        DebugPro d=new DebugPro();
+        char board[][] = {{'5','3','.','.','7','.','.','.','.'},
+                {'6','.','.','1','9','5','.','.','.'},
+                {'.','9','8','.','.','.','.','6','.'},
+                {'8','.','.','.','6','.','.','.','8'},
+                {'4','.','.','8','5','3','.','.','1'},
+                {'7','1','.','.','2','.','.','.','6'},
+                {'.','6','.','.','.','.','2','8','.'},
+                {'.','.','.','4','1','9','.','.','5'},
+                {'.','.','.','.','8','.','.','7','9'}};
         String word = "ABCCED";
         int r = board.length;
         int c = board[0].length;
         boolean visit[][] = new boolean[r][c];
-        boolean val = exit(board, 0, 0, visit, 0, word);
-        System.out.println(val);
+        d.solveSudoku(board);
+        System.out.println();
 
     }
 }

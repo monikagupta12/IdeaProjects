@@ -8,10 +8,10 @@ public class BinarayIndexedTree2D {
         int y1=1;
         int x2=2;
         int y2=3;
-        int sum1=rangeSum(x1+1,y1+1,x2+1,y2+1,bit);
+        int sum1=rangeSum(x1,y1,x2,y2,bit);
         System.out.println(sum1+"=");
         updateArray(3+1,3+1,5,bit);
-        int sum2 =rangeSum(x1+1,y1+1,x2+1,y2+1,bit);
+        int sum2 =rangeSum(x1,y1,x2,y2,bit);
         System.out.println(sum2 +"=");
 
 
@@ -41,7 +41,7 @@ public class BinarayIndexedTree2D {
 
     private static void updateArray(int i, int j, int val, int[][] bit) {
         int m= bit.length;
-        int n=bit.length+1;
+        int n=bit[0].length;
         int newI=i;
         while(newI<m){
             int newJ=j;
@@ -53,7 +53,7 @@ public class BinarayIndexedTree2D {
         }
     }
     private static int rangeSum(int x1, int y1, int x2, int y2,int[][] bit ){
-        return sumNum(x2,y2,bit)-sumNum(x1-1,y2,bit)-sumNum(x2,y1-1,bit)+sumNum(x1-1,y1-1,bit);
+        return sumNum(x2+1,y2+1,bit)-sumNum(x1,y2+1,bit)-sumNum(x2+1,y1,bit)+sumNum(x1,y1,bit);
     }
     private static int sumNum(int i, int j, int[][] bit){
         int sum=0;
